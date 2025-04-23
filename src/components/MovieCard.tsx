@@ -1,12 +1,12 @@
 import React from 'react';
 
-interface BookCardProps {
+interface MovieCardProps {
   title: string;
   imageUrl: string;
   rating: number;
 }
 
-const BookCard: React.FC<BookCardProps> = ({ title, imageUrl, rating }) => {
+const MovieCard: React.FC<MovieCardProps> = ({ title, imageUrl, rating }) => {
   return (
     <div className="w-[200px] shadow-sm text-left">
       <a href="#">
@@ -72,4 +72,4 @@ const BookCard: React.FC<BookCardProps> = ({ title, imageUrl, rating }) => {
   );
 };
 
-export default BookCard;
+export default MovieCard;
