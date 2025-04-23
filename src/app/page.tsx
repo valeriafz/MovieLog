@@ -1,3 +1,4 @@
+import BookCard from '@/components/bookCard';
 import Image from 'next/image';
 
 export default function Home() {
@@ -60,7 +61,11 @@ export default function Home() {
             </div>
             
             <div className="bg-white/20 backdrop-blur-md rounded-3xl border border-white/50 shadow-xl p-6 md:p-8 z-10">
-
+            <BookCard 
+  title="The Great Gatsby" 
+  imageUrl="/bckg.jpg" 
+  rating={4.5} 
+/>
             </div>
           </div>
         </div>
