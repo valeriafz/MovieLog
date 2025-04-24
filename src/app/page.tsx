@@ -1,6 +1,5 @@
 "use client"
 
-import Layout from '@/components/Layout';
 import MovieCard from '@/components/MovieCard';
 import { useState } from 'react';
 
@@ -16,7 +15,7 @@ export default function Home() {
   ];
 
   return (
-    <Layout>
+    <>
       <div className="relative mx-auto w-1/2 -mb-4 z-20"> 
         <div className="relative">
           <input 
@@ -71,6 +70,6 @@ export default function Home() {
           status='Watch later'
         />
       </div>
-    </Layout>
+    </>
   );
 }

@@ -1,13 +1,11 @@
 "use client";
 
 import { useState } from 'react';
-import Layout from '@/components/Layout';
 
 export default function Add() {
   const [isUploading, setIsUploading] = useState(false);
 
   return (
-    <Layout>
       <div className="bg-white/20 backdrop-blur-md rounded-3xl border border-white/50 shadow-xl p-6 md:p-8 z-10">
       <h2 className="text-2xl font-semibold text-center text-black mb-6">Add new movie to watchlist</h2>
       <form className="space-y-6">
@@ -95,6 +93,5 @@ export default function Add() {
         </div>
       </form>
       </div>
-    </Layout>
   );
 }

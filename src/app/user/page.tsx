@@ -1,6 +1,5 @@
 "use client";
 
-import Layout from '@/components/Layout';
 import MovieCard from '@/components/MovieCard';
 import { useState } from 'react';
 
@@ -12,13 +11,12 @@ export default function User() {
   };
 
   return (
-    <Layout>
       <div className={`${darkMode ? 'bg-gray-900/80 border-gray-700/50 text-white' : 'bg-white/20 border-white/50 text-black'} backdrop-blur-md rounded-3xl border shadow-xl p-6 md:p-8 z-10`}>
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">
             <button
               onClick={toggleDarkMode}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${darkMode ? 'bg-orange-700' : 'bg-gray-200'}`}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 cursor-pointer ${darkMode ? 'bg-orange-700' : 'bg-gray-200'}`}
               role="switch"
               aria-checked={darkMode}
             >
@@ -71,6 +69,5 @@ export default function User() {
           </div>
         </div>
       </div>
-    </Layout>
   );
 }
