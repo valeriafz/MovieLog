@@ -17,7 +17,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       />
      
       <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
-        {/* Sidebar */}
         <div className="flex flex-col items-center mr-4 lg:mr-8">
           <div className="bg-white/20 backdrop-blur-md rounded-2xl border border-white/50 p-4 mb-4 hover:bg-white/30 transition-all cursor-pointer group">
             <a href="/">
@@ -70,7 +69,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </div>
         </div>
 
-        {/* Main Content */}
         <div className="flex-1 max-w-2xl">
           {children}
         </div>
