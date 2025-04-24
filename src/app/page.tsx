@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 export default function Home() {
   const [showFilters, setShowFilters] = useState(false);
-  const [activeFilter, setActiveFilter] = useState<string | null>(null); // Update type here
+  const [activeFilter, setActiveFilter] = useState<string | null>(null); 
 
   const filters = [
     { label: 'Watch later', value: 'watch-later' },
@@ -44,7 +44,7 @@ export default function Home() {
                 {filters.map((filter) => (
                   <div
                     key={filter.value}
-                    className={`block px-4 py-2 text-sm cursor-pointer ${
+                    className={`block px-4 py-2 text-xs cursor-pointer ${
                       activeFilter === filter.value 
                         ? 'bg-white text-gray-900' 
                         : 'hover:font-semibold hover:bg-gray-100'
@@ -66,7 +66,7 @@ export default function Home() {
       <div className="bg-white/20 backdrop-blur-md rounded-3xl border border-white/50 shadow-xl p-6 md:p-8 z-10">
         <MovieCard
           title="The Great Gatsby"
-          imageUrl="/bckg.jpg"
+          imageUrl="https://www.thecommononline.org/wp-content/uploads/2013/06/Screen-Shot-2017-05-31-at-2.19.46-PM.png"
           rating={4}
         />
       </div>

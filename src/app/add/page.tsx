@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from 'react';
-import Image from 'next/image';
 import Layout from '@/components/Layout';
 
 export default function Add() {
