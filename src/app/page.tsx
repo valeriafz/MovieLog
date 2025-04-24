@@ -67,7 +67,8 @@ export default function Home() {
         <MovieCard
           title="The Great Gatsby"
           imageUrl="https://www.thecommononline.org/wp-content/uploads/2013/06/Screen-Shot-2017-05-31-at-2.19.46-PM.png"
-          rating={4}
+          rating={0}
+          status='Watch later'
         />
       </div>
     </Layout>
