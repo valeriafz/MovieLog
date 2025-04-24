@@ -2,15 +2,40 @@
 
 import Layout from '@/components/Layout';
 import MovieCard from '@/components/MovieCard';
+import { useState } from 'react';
 
 export default function User() {
+  const [darkMode, setDarkMode] = useState(false);
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
+
   return (
     <Layout>
-      <div className="bg-white/20 backdrop-blur-md rounded-3xl border border-white/50 shadow-xl p-6 md:p-8 z-10">
-        <h2 className="text-2xl font-semibold text-center text-black mb-6">Your reviews</h2>
+      <div className={`${darkMode ? 'bg-gray-900/80 border-gray-700/50 text-white' : 'bg-white/20 border-white/50 text-black'} backdrop-blur-md rounded-3xl border shadow-xl p-6 md:p-8 z-10`}>
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center">
+            <button
+              onClick={toggleDarkMode}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${darkMode ? 'bg-orange-700' : 'bg-gray-200'}`}
+              role="switch"
+              aria-checked={darkMode}
+            >
+              <span className="sr-only">Toggle dark mode</span>
+              <span
+                className={`${
+                  darkMode ? 'translate-x-6' : 'translate-x-1'
+                } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
+              />
+            </button>
+            <span className="ml-3 text-sm font-medium">Try Dark Mode</span>
+          </div>
+          <h2 className={`text-2xl font-semibold ${darkMode ? 'text-white' : 'text-black'}`}>Your reviews</h2>
+        </div>
         
         <div className="space-y-4"> 
-          <div className="bg-white/30 backdrop-blur-sm rounded-xl border border-white/40 p-4">
+          <div className={`${darkMode ? 'bg-gray-800/50 border-gray-700/40' : 'bg-white/30 border-white/40'} backdrop-blur-sm rounded-xl border p-4`}>
             <div className="flex gap-4 items-start"> 
               <div className="w-16 flex-shrink-0"> 
                 <div className="aspect-[2/3] rounded-lg overflow-hidden">
@@ -24,12 +49,12 @@ export default function User() {
               
               <div className="flex-1 space-y-1"> 
                 <div className="flex justify-between items-start">
-                  <h3 className="text-md font-bold text-black">The Great Gatsby</h3> {/* Smaller text */}
+                  <h3 className={`text-md font-bold ${darkMode ? 'text-white' : 'text-black'}`}>The Great Gatsby</h3>
                   <div className="flex items-center">
                     {[...Array(5)].map((_, i) => (
                       <svg
                         key={i}
-                        className={`w-4 h-4 ${i < 4 ? 'text-orange-700' : 'text-gray-600'}`} // Smaller stars
+                        className={`w-4 h-4 ${i < 4 ? 'text-orange-700' : darkMode ? 'text-gray-400' : 'text-gray-600'}`}
                         fill="currentColor"
                         viewBox="0 0 20 20"
                       >
@@ -39,8 +64,8 @@ export default function User() {
                   </div>
                 </div>
                 
-                <div className="text-xs text-gray-600">Reviewed on 2023-11-15</div> 
-                <p className="text-sm text-gray-800 line-clamp-2">Your review text would appear here...</p> {/* Smaller text with line clamp */}
+                <div className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Reviewed on 2023-11-15</div> 
+                <p className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-800'} line-clamp-2`}>Your review text would appear here...</p>
               </div>
             </div>
           </div>
