@@ -1,12 +1,13 @@
-"use client"
+"use client";
 
-import Layout from '@/components/Layout';
 import MovieCard from '@/components/MovieCard';
 import { useState } from 'react';
+import { useTheme } from '@/context/ThemeContext';
 
 export default function Home() {
   const [showFilters, setShowFilters] = useState(false);
-  const [activeFilter, setActiveFilter] = useState<string | null>(null); 
+  const [activeFilter, setActiveFilter] = useState<string | null>(null);
+  const { darkMode } = useTheme(); 
 
   const filters = [
     { label: 'Watch later', value: 'watch-later' },
@@ -16,39 +17,54 @@ export default function Home() {
   ];
 
   return (
-    <Layout>
+    <>
       <div className="relative mx-auto w-1/2 -mb-4 z-20"> 
         <div className="relative">
           <input 
             type="text" 
             placeholder="Search..." 
-            className="w-full bg-white/20 backdrop-blur-sm border border-white/60 rounded-3xl py-3 px-5 pl-12 focus:outline-none focus:ring-2 focus:ring-white/40"
+            className={`w-full bg-base backdrop-blur-sm border border-base rounded-3xl py-3 px-5 pl-12 focus:outline-none focus:ring-2 ${
+              darkMode ? 'focus:ring-white/40' : 'focus:ring-gray-400'
+            }`}
+            style={{ color: 'var(--text-base)' }}
           />
-          <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-600">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="black">
+          <div className="absolute left-4 top-1/2 transform -translate-y-1/2" style={{ color: 'var(--text-base)' }}>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
           <div 
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-700 cursor-pointer"
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 cursor-pointer"
+            style={{ color: 'var(--text-base)' }}
             onClick={() => setShowFilters(!showFilters)}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="black">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
             </svg>
           </div>
           
           {showFilters && (
-            <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
+            <div 
+              className="absolute right-0 mt-2 w-48 rounded-md shadow-lg z-50"
+              style={{
+                backgroundColor: 'var(--card-bg)',
+                borderColor: 'var(--card-border)',
+                borderWidth: '1px'
+              }}
+            >
               <div className="py-1">
                 {filters.map((filter) => (
                   <div
                     key={filter.value}
                     className={`block px-4 py-2 text-xs cursor-pointer ${
                       activeFilter === filter.value 
-                        ? 'bg-white text-gray-900' 
-                        : 'hover:font-semibold hover:bg-gray-100'
+                        ? 'font-semibold' 
+                        : 'hover:font-semibold'
                     }`}
+                    style={{
+                      color: 'var(--card-body)',
+                      backgroundColor: activeFilter === filter.value ? 'var(--card-border)' : 'transparent'
+                    }}
                     onClick={() => {
                       setActiveFilter(filter.value);
                       setShowFilters(false);
@@ -63,7 +79,9 @@ export default function Home() {
         </div>
       </div>
       
-      <div className="bg-white/20 backdrop-blur-md rounded-3xl border border-white/50 shadow-xl p-6 md:p-8 z-10">
+      <div 
+        className="bg-base border border-base text-base backdrop-blur-md rounded-3xl border shadow-xl p-6 md:p-8 z-10"
+      >
         <MovieCard
           title="The Great Gatsby"
           imageUrl="https://www.thecommononline.org/wp-content/uploads/2013/06/Screen-Shot-2017-05-31-at-2.19.46-PM.png"
@@ -71,6 +89,6 @@ export default function Home() {
           status='Watch later'
         />
       </div>
-    </Layout>
+    </>
   );
 }

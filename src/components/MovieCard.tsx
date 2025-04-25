@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useState, useRef, useEffect } from 'react';
 
@@ -26,10 +26,12 @@ const MovieCard: React.FC<MovieCardProps> = ({
   const handleOpenModal = (e: React.MouseEvent) => {
     e.preventDefault();
     setIsModalOpen(true);
+    document.body.style.overflow = 'hidden';
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+    document.body.style.overflow = 'auto';
   };
 
   const handleStarClick = (selectedRating: number) => {
@@ -51,12 +53,14 @@ const MovieCard: React.FC<MovieCardProps> = ({
   const handleSaveReview = () => {
     console.log('Saving review:', { title, userRating, userReview });
     setIsModalOpen(false);
+    document.body.style.overflow = 'auto';
   };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
         setIsModalOpen(false);
+        document.body.style.overflow = 'auto';
       }
     };
 
@@ -66,6 +70,7 @@ const MovieCard: React.FC<MovieCardProps> = ({
     
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      document.body.style.overflow = 'auto';
     };
   }, [isModalOpen]);
 
@@ -82,16 +87,17 @@ const MovieCard: React.FC<MovieCardProps> = ({
       </div>
       <div className="px-3 pb-3 pt-2">
         <div onClick={handleOpenModal} className="cursor-pointer">
-          <h5 className="text-base font-semibold tracking-tight text-black line-clamp-2 mb-1">
+          <h5 className="text-base font-semibold tracking-tight line-clamp-2 mb-1" style={{ color: 'var(--card-heading)' }}>
             {title}
           </h5>
         </div>
-        <div className="flex items-center text-current mb-1">
+        <div className="flex items-center mb-1">
           <div className="flex items-center space-x-1">
             {[...Array(5)].map((_, i) => (
               <svg
                 key={i}
-                className={`w-4 h-4 ${i < rating ? 'text-orange-700' : 'text-gray-500 dark:text-gray-700'}`}
+                className={`w-4 h-4 ${i < rating ? 'text-orange-700' : ''}`}
+                style={{ color: i < rating ? '#c2410c' : 'var(--star-empty)' }}
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="currentColor"
@@ -103,9 +109,10 @@ const MovieCard: React.FC<MovieCardProps> = ({
           </div>
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-xs font-medium text-gray-700 mt-0">
+          <span className="text-xs font-medium mt-0" style={{ color: 'var(--card-subtext)' }}>
             {status}
           </span>
+          
           <button 
             className="group relative p-1"
             onClick={handleOpenModal}
@@ -137,94 +144,103 @@ const MovieCard: React.FC<MovieCardProps> = ({
       </div>
 
       {isModalOpen && (
-        <div 
-          ref={modalRef}
-          className="absolute top-full left-0 z-10 mt-2 bg-white rounded-lg shadow-lg p-4 border border-gray-200 w-64"
-        >
-          <div className="flex justify-between items-center mb-3">
-            <h3 className="text-base font-semibold truncate max-w-full">{title}</h3>
-            <button 
-              onClick={handleCloseModal}
-              className="text-gray-500 hover:text-black"
+        <>
+          <div className="fixed inset-0  bg-opacity-80 backdrop-blur-20 z-40"></div>
+          <div 
+            className="fixed inset-0 flex items-center justify-center z-50 p-4"
+          >
+            <div 
+              ref={modalRef}
+              className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-5 max-w-md w-full max-h-[90vh] overflow-y-auto"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-              </svg>
-            </button>
-          </div>
-          
-          {status === 'Completed' ? (
-            <div>
-              <div className="flex items-center mb-2">
-                <p className="text-sm text-gray-600 mr-2">Rating:</p>
-                <div className="flex">
-                  {[...Array(5)].map((_, i) => (
-                    <svg
-                      key={i}
-                      className={`w-4 h-4 ${i < rating ? 'text-orange-700' : 'text-gray-300'}`}
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 22 20"
-                    >
-                      <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                    </svg>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <p className="text-xs mb-1 font-medium">Review:</p>
-                <p className="text-sm text-gray-700">{review || 'No review available.'}</p>
-              </div>
-            </div>
-          ) : (
-            <div>
-              <div className="flex items-center mb-3">
-                <p className="text-sm text-gray-600 mr-2">Your Rating:</p>
-                <div className="flex">
-                  {[...Array(5)].map((_, i) => (
-                    <svg
-                      key={i}
-                      className={`w-5 h-5 cursor-pointer ${
-                        i < displayRating ? 'text-orange-700' : 'text-gray-300'
-                      }`}
-                      onMouseEnter={() => handleStarHover(i + 1)}
-                      onMouseLeave={handleStarLeave}
-                      onClick={() => handleStarClick(i + 1)}
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 22 20"
-                    >
-                      <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                    </svg>
-                  ))}
-                </div>
-              </div>
-              <div className="mb-3">
-                <label htmlFor="review" className="block text-xs font-medium mb-1">
-                  Your Review:
-                </label>
-                <textarea
-                  id="review"
-                  rows={3}
-                  className="w-full text-sm border border-gray-300 rounded-md p-2"
-                  value={userReview}
-                  onChange={(e) => setUserReview(e.target.value)}
-                  placeholder="Write your review here..."
-                />
-              </div>
-              <div className="flex justify-end">
-                <button
-                  onClick={handleSaveReview}
-                  className="px-3 py-1 text-sm bg-orange-700 text-white rounded-md hover:bg-orange-800"
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-black dark:text-white font-semibold text-lg">
+                  {title}
+                </h3>
+                <button 
+                  onClick={handleCloseModal}
+                  className="text-gray-500 hover:text-black dark:hover:text-white cursor-pointer"
                 >
-                  Save
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
                 </button>
               </div>
+              
+              {status === 'Completed' ? (
+                <div>
+                  <div className="flex items-center mb-3">
+                    <p className="text-sm text-gray-600 dark:text-gray-300 mr-2">Rating:</p>
+                    <div className="flex">
+                      {[...Array(5)].map((_, i) => (
+                        <svg
+                          key={i}
+                          className={`w-5 h-5 ${i < rating ? 'text-orange-700' : 'text-gray-300 dark:text-gray-500'}`}
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="currentColor"
+                          viewBox="0 0 22 20"
+                        >
+                          <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                        </svg>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Review:</p>
+                    <p className="text-sm text-gray-700 dark:text-gray-200">{review || 'No review available.'}</p>
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  <div className="flex items-center mb-4">
+                    <p className="text-sm text-gray-600 dark:text-gray-300 mr-2">Your Rating:</p>
+                    <div className="flex">
+                      {[...Array(5)].map((_, i) => (
+                        <svg
+                          key={i}
+                          className={`w-6 h-6 cursor-pointer ${
+                            i < displayRating ? 'text-orange-700' : 'text-gray-300 dark:text-gray-500'
+                          }`}
+                          onMouseEnter={() => handleStarHover(i + 1)}
+                          onMouseLeave={handleStarLeave}
+                          onClick={() => handleStarClick(i + 1)}
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="currentColor"
+                          viewBox="0 0 22 20"
+                        >
+                          <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                        </svg>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="mb-4">
+                    <label htmlFor="review" className="block text-gray-600 dark:text-gray-300 text-sm font-medium mb-2">
+                      Your Review:
+                    </label>
+                    <textarea
+                      id="review"
+                      rows={4}
+                      className="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-md p-3 bg-white dark:bg-gray-700 text-black dark:text-white"
+                      value={userReview}
+                      onChange={(e) => setUserReview(e.target.value)}
+                      placeholder="Write your review here..."
+                    />
+                  </div>
+                  <div className="flex justify-end">
+                    <button
+                      onClick={handleSaveReview}
+                      className="px-4 py-2 text-sm bg-orange-700 text-white rounded-md hover:bg-orange-800 transition-colors"
+                    >
+                      Save Review
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          </div>
+        </>
       )}
     </div>
   );

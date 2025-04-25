@@ -1,52 +1,66 @@
 "use client";
 
 import { useState } from 'react';
-import Layout from '@/components/Layout';
 
 export default function Add() {
   const [isUploading, setIsUploading] = useState(false);
 
   return (
-    <Layout>
-      <div className="bg-white/20 backdrop-blur-md rounded-3xl border border-white/50 shadow-xl p-6 md:p-8 z-10">
-      <h2 className="text-2xl font-semibold text-center text-black mb-6">Add new movie to watchlist</h2>
+    <div className="bg-base border border-base text-base backdrop-blur-md rounded-3xl shadow-xl p-6 md:p-8 z-10">
+        <h2 className="text-2xl font-semibold text-center mb-8" style={{ color: 'var(--card-heading)' }}>
+          Add new movie to watchlist
+        </h2>
+
       <form className="space-y-6">
         <div className="flex flex-col items-center">
-          <label htmlFor="name" className="block text-sm font-medium text-white mb-2 w-full max-w-md text-left">
+          <label htmlFor="name" className="block text-sm font-medium w-full max-w-md text-left text-white">
             Name
           </label>
           <input
             type="text"
             id="name"
             name="name"
-            className="w-full max-w-md bg-white/20 backdrop-blur-sm border border-white/60 rounded-xl py-2 px-4 focus:outline-none focus:ring-2 focus:ring-white/40 text-white placeholder-white/70"
+            className="w-full max-w-md backdrop-blur-sm border rounded-xl py-2 px-4 focus:outline-none focus:ring-2 focus:ring-white/40 "
+            style={{
+              backgroundColor: 'var(--card-bg)',
+              borderColor: 'var(--card-border)',
+              color: 'var(--text-base)',
+            }}
             placeholder="Enter movie name"
           />
         </div>
 
         <div className="flex flex-col items-center">
-          <label htmlFor="picture" className="block text-sm font-medium text-white mb-2 w-full max-w-md text-left">
+          <label htmlFor="picture" className="block text-sm font-medium w-full max-w-md text-white text-left">
             Picture URL
           </label>
           <input
             type="text"
             id="picture"
             name="picture"
-            className="w-full max-w-md bg-white/20 backdrop-blur-sm border border-white/60 rounded-xl py-2 px-4 focus:outline-none focus:ring-2 focus:ring-white/40 text-white placeholder-white/70 mb-3"
+            className="w-full max-w-md backdrop-blur-sm border rounded-xl py-2 px-4 focus:outline-none focus:ring-2 focus:ring-white/40 mb-3"
+            style={{
+              backgroundColor: 'var(--card-bg)',
+              borderColor: 'var(--card-border)',
+              color: 'var(--text-base)',
+        
+            }}
             placeholder="Enter image URL"
           />
-          
+
           <div className="w-full max-w-md flex items-center justify-between">
-            <label 
-              htmlFor="file-upload" 
-              className="flex items-center gap-2 text-sm text-black cursor-pointer transition-colors"
+            <label
+              htmlFor="file-upload"
+              className="flex items-center gap-2 text-sm cursor-pointer transition-colors"
+              style={{ color: 'var(--text-base)' }}
               onClick={() => setIsUploading(true)}
             >
               <span>Or Upload from device</span>
               <div className={`relative p-1 rounded-full transition-all ${isUploading ? 'bg-white' : ''}`}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className={`h-5 w-5 transition-colors ${isUploading ? 'text-orange-700' : 'text-black'}`}
+                  className={`h-5 w-5 transition-colors ${isUploading ? 'text-orange-700' : ''}`}
+                  style={{ color: isUploading ? '#c2410c' : 'var(--icon-color)' }}
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -71,7 +85,7 @@ export default function Add() {
         </div>
 
         <div className="flex flex-col items-center">
-          <label htmlFor="rating" className="block text-sm font-medium text-white mb-2 w-full max-w-md text-left">
+          <label htmlFor="rating" className="block text-sm font-medium w-full max-w-md text-left text-white -mt-2">
             Rating (You can skip if you haven't watched it yet)
           </label>
           <input
@@ -80,7 +94,12 @@ export default function Add() {
             name="rating"
             min="1"
             max="5"
-            className="w-full max-w-md bg-white/20 backdrop-blur-sm border border-white/60 rounded-xl py-2 px-4 focus:outline-none focus:ring-2 focus:ring-white/40 text-white placeholder-white/70"
+            className="w-full max-w-md backdrop-blur-sm border rounded-xl py-2 px-4 focus:outline-none focus:ring-2 focus:ring-white/40"
+            style={{
+              backgroundColor: 'var(--card-bg)',
+              borderColor: 'var(--card-border)',
+              color: 'var(--text-base)',
+            }}
             placeholder="Enter rating 1-5"
           />
         </div>
@@ -94,7 +113,6 @@ export default function Add() {
           </button>
         </div>
       </form>
-      </div>
-    </Layout>
+    </div>
   );
 }

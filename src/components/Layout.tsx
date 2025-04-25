@@ -1,24 +1,16 @@
-import Image from 'next/image';
+"use client"
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
+
   return (
     <div className="relative min-h-screen">
-      <Image
-        src="/bckg.jpg"
-        alt="Background"
-        fill
-        style={{ objectFit: 'cover' }}
-        priority
-        className="-z-10"
-      />
-     
       <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
         <div className="flex flex-col items-center mr-4 lg:mr-8">
-          <div className="bg-white/20 backdrop-blur-md rounded-2xl border border-white/50 p-4 mb-4 hover:bg-white/30 transition-all cursor-pointer group">
+          <div className="bg-base border border-base text-base backdrop-blur-md rounded-2xl border border-white/50 p-4 mb-4 hover:bg-white/30 transition-all cursor-pointer group">
             <a href="/">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -36,7 +28,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               </svg>
             </a>
           </div>
-          <div className="bg-white/20 backdrop-blur-md rounded-2xl border border-white/50 p-4 mb-4 hover:bg-white/30 transition-all cursor-pointer group">
+          <div className="bg-base border border-base text-base backdrop-blur-md rounded-2xl border border-white/50 p-4 mb-4 hover:bg-white/30 transition-all cursor-pointer group">
             <a href="/add">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -49,7 +41,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               </svg>
             </a>
           </div>
-          <div className="bg-white/20 backdrop-blur-md rounded-2xl border border-white/50 p-4 hover:bg-white/30 transition-all cursor-pointer group">
+          <div className="bg-base border border-base text-base backdrop-blur-md rounded-2xl border border-white/50 p-4 hover:bg-white/30 transition-all cursor-pointer group">
             <a href="/user">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

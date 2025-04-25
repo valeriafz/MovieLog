@@ -1,26 +1,40 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg-base: rgba(255, 255, 255, 0.2);
+  --border-base: rgba(255, 255, 255, 0.5);
+  --text-base: black;
+
+  --card-bg: rgba(255, 255, 255, 0.3);
+  --card-border: rgba(255, 255, 255, 0.4);
+  --card-heading: black;
+  --card-subtext: #4b5563; /* Tailwind's gray-600 */
+  --card-body: #1f2937;     /* Tailwind's gray-800 */
+  --switch-bg: #e5e7eb;     /* Tailwind's gray-200 */
+  --star-empty: #4b5563;    /* Tailwind's gray-600 */
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.dark {
+  --bg-base: rgba(17, 24, 39, 0.8);  /* bg-gray-900/80 */
+  --border-base: rgba(55, 65, 81, 0.5); /* border-gray-700/50 */
+  --text-base: white;
+
+  --card-bg: rgba(31, 41, 55, 0.5);   /* bg-gray-800/50 */
+  --card-border: rgba(55, 65, 81, 0.4); /* border-gray-700/40 */
+  --card-heading: white;
+  --card-subtext: #9ca3af; /* gray-400 */
+  --card-body: #d1d5db;     /* gray-300 */
+  --switch-bg: #c2410c;     /* orange-700 */
+  --star-empty: #9ca3af;    /* gray-400 */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.bg-base {
+  background-color: var(--bg-base);
 }
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: 'Ubuntu', sans-serif;
+.border-base {
+  border-color: var(--border-base);
+}
+.text-base {
+  color: var(--text-base);
 }
