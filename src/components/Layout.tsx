@@ -1,10 +1,15 @@
 "use client"
+import { usePathname } from 'next/navigation';
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
+  const pathname = usePathname();
+  
+  const isHomePage = pathname === '/' || pathname === '/home';
+  const maxWidthClass = isHomePage ? 'max-w-6xl' : 'max-w-2xl';
 
   return (
     <div className="relative min-h-screen">
@@ -61,7 +66,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </div>
         </div>
 
-        <div className="flex-1 max-w-2xl">
+        <div className={`flex-1 ${maxWidthClass}`}>
           {children}
         </div>
       </div>

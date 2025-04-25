@@ -1,17 +1,63 @@
 "use client";
 
-import { useState } from 'react';
+import { Movie } from '@/types/movie';
+import { useState, useEffect } from 'react';
 
 export default function Add() {
   const [isUploading, setIsUploading] = useState(false);
+  const [movieName, setMovieName] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+  const [rating, setRating] = useState('');
+  const [movies, setMovies] = useState<Movie[]>([]);
+
+  useEffect(() => {
+    const storedMovies = localStorage.getItem('watchlist');
+    if (storedMovies) {
+      setMovies(JSON.parse(storedMovies));
+    }
+  }, []);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    const newMovie: Movie = {
+      id: Date.now(), 
+      title: movieName,
+      imageUrl: imageUrl || 'https://via.placeholder.com/300x450?text=No+Image',
+      rating: rating ? parseInt(rating, 10) : 0,
+      status: rating ? 'Completed' : 'Watch later',
+      review: '',
+      dateAdded: new Date().toISOString()
+    };
+    
+    const updatedMovies = [...movies, newMovie];
+    
+    localStorage.setItem('watchlist', JSON.stringify(updatedMovies));
+    
+    setMovies(updatedMovies);
+    setMovieName('');
+    setImageUrl('');
+    setRating('');
+    
+    alert(`"${movieName}" added to your watchlist!`);
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setImageUrl(imageUrl);
+      setIsUploading(false);
+    }
+  };
 
   return (
     <div className="bg-base border border-base text-base backdrop-blur-md rounded-3xl shadow-xl p-6 md:p-8 z-10">
-        <h2 className="text-2xl font-semibold text-center mb-8" style={{ color: 'var(--card-heading)' }}>
-          Add new movie to watchlist
-        </h2>
+      <h2 className="text-2xl font-semibold text-center mb-8" style={{ color: 'var(--card-heading)' }}>
+        Add new movie to watchlist
+      </h2>
 
-      <form className="space-y-6">
+      <form className="space-y-6" onSubmit={handleSubmit}>
         <div className="flex flex-col items-center">
           <label htmlFor="name" className="block text-sm font-medium w-full max-w-md text-left text-white">
             Name
@@ -20,6 +66,9 @@ export default function Add() {
             type="text"
             id="name"
             name="name"
+            value={movieName}
+            onChange={(e) => setMovieName(e.target.value)}
+            required
             className="w-full max-w-md backdrop-blur-sm border rounded-xl py-2 px-4 focus:outline-none focus:ring-2 focus:ring-white/40 "
             style={{
               backgroundColor: 'var(--card-bg)',
@@ -38,12 +87,13 @@ export default function Add() {
             type="text"
             id="picture"
             name="picture"
+            value={imageUrl}
+            onChange={(e) => setImageUrl(e.target.value)}
             className="w-full max-w-md backdrop-blur-sm border rounded-xl py-2 px-4 focus:outline-none focus:ring-2 focus:ring-white/40 mb-3"
             style={{
               backgroundColor: 'var(--card-bg)',
               borderColor: 'var(--card-border)',
               color: 'var(--text-base)',
-        
             }}
             placeholder="Enter image URL"
           />
@@ -79,7 +129,8 @@ export default function Add() {
               id="file-upload"
               name="file-upload"
               className="hidden"
-              onChange={() => setIsUploading(false)}
+              accept="image/*"
+              onChange={handleFileUpload}
             />
           </div>
         </div>
@@ -94,6 +145,8 @@ export default function Add() {
             name="rating"
             min="1"
             max="5"
+            value={rating}
+            onChange={(e) => setRating(e.target.value)}
             className="w-full max-w-md backdrop-blur-sm border rounded-xl py-2 px-4 focus:outline-none focus:ring-2 focus:ring-white/40"
             style={{
               backgroundColor: 'var(--card-bg)',

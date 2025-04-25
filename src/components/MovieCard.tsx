@@ -8,6 +8,7 @@ interface MovieCardProps {
   rating: number;
   status: 'Completed' | 'Watch later';
   review?: string;
+  id?: number; // Added ID for localStorage updates
 }
 
 const MovieCard: React.FC<MovieCardProps> = ({ 
@@ -15,7 +16,8 @@ const MovieCard: React.FC<MovieCardProps> = ({
   imageUrl, 
   rating, 
   status, 
-  review = '' 
+  review = '',
+  id
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userRating, setUserRating] = useState(status === 'Completed' ? rating : 0);
@@ -35,15 +37,11 @@ const MovieCard: React.FC<MovieCardProps> = ({
   };
 
   const handleStarClick = (selectedRating: number) => {
-    if (status === 'Watch later') {
-      setUserRating(selectedRating);
-    }
+    setUserRating(selectedRating);
   };
 
   const handleStarHover = (hoverRating: number) => {
-    if (status === 'Watch later') {
-      setHoveredRating(hoverRating);
-    }
+    setHoveredRating(hoverRating);
   };
 
   const handleStarLeave = () => {
@@ -51,9 +49,36 @@ const MovieCard: React.FC<MovieCardProps> = ({
   };
 
   const handleSaveReview = () => {
+    // Create the updated movie object
+    const updatedMovie = {
+      id,
+      title,
+      imageUrl,
+      rating: userRating,
+      status: userRating > 0 ? 'Completed' : 'Watch later',
+      review: userReview,
+      dateUpdated: new Date().toISOString()
+    };
+
+    // Get current watchlist from localStorage
+    const storedMovies = localStorage.getItem('watchlist');
+    if (storedMovies) {
+      const watchlist = JSON.parse(storedMovies);
+      
+      // Find and update the movie
+      const updatedWatchlist = watchlist.map((movie: { id: number | undefined; }) => 
+        movie.id === id ? { ...movie, ...updatedMovie } : movie
+      );
+      
+      // Save back to localStorage
+      localStorage.setItem('watchlist', JSON.stringify(updatedWatchlist));
+    }
+
     console.log('Saving review:', { title, userRating, userReview });
     setIsModalOpen(false);
     document.body.style.overflow = 'auto';
+    
+    window.location.reload();
   };
 
   useEffect(() => {
@@ -117,35 +142,45 @@ const MovieCard: React.FC<MovieCardProps> = ({
             className="group relative p-1"
             onClick={handleOpenModal}
           >
-            <div className="transition-all duration-200 w-7 h-7 flex items-center justify-center rounded-full group-hover:bg-white group-active:bg-white">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-black group-hover:text-orange-700 group-active:text-orange-700 transition-colors duration-200"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                />
-              </svg>
-            </div>
+            <div 
+  className={`transition-all duration-200 w-7 h-7 flex items-center justify-center rounded-full ${
+    status === 'Completed' 
+      ? 'bg-white text-orange-700' 
+      : 'group-hover:bg-white group-active:bg-white'
+  }`}
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className={`h-5 w-5 ${
+      status === 'Completed' 
+        ? 'text-orange-700' 
+        : 'text-black group-hover:text-orange-700 group-active:text-orange-700'
+    } transition-colors duration-200`}
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+    />
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+    />
+  </svg>
+</div>
           </button>
         </div>
       </div>
 
       {isModalOpen && (
         <>
-          <div className="fixed inset-0  bg-opacity-80 backdrop-blur-20 z-40"></div>
+          <div className="fixed inset-0 bg-opacity-80 backdrop-blur-20 z-40"></div>
           <div 
             className="fixed inset-0 flex items-center justify-center z-50 p-4"
           >
@@ -167,77 +202,51 @@ const MovieCard: React.FC<MovieCardProps> = ({
                 </button>
               </div>
               
-              {status === 'Completed' ? (
-                <div>
-                  <div className="flex items-center mb-3">
-                    <p className="text-sm text-gray-600 dark:text-gray-300 mr-2">Rating:</p>
-                    <div className="flex">
-                      {[...Array(5)].map((_, i) => (
-                        <svg
-                          key={i}
-                          className={`w-5 h-5 ${i < rating ? 'text-orange-700' : 'text-gray-300 dark:text-gray-500'}`}
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="currentColor"
-                          viewBox="0 0 22 20"
-                        >
-                          <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                        </svg>
-                      ))}
-                    </div>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Review:</p>
-                    <p className="text-sm text-gray-700 dark:text-gray-200">{review || 'No review available.'}</p>
-                  </div>
-                </div>
-              ) : (
-                <div>
-                  <div className="flex items-center mb-4">
-                    <p className="text-sm text-gray-600 dark:text-gray-300 mr-2">Your Rating:</p>
-                    <div className="flex">
-                      {[...Array(5)].map((_, i) => (
-                        <svg
-                          key={i}
-                          className={`w-6 h-6 cursor-pointer ${
-                            i < displayRating ? 'text-orange-700' : 'text-gray-300 dark:text-gray-500'
-                          }`}
-                          onMouseEnter={() => handleStarHover(i + 1)}
-                          onMouseLeave={handleStarLeave}
-                          onClick={() => handleStarClick(i + 1)}
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="currentColor"
-                          viewBox="0 0 22 20"
-                        >
-                          <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                        </svg>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="mb-4">
-                    <label htmlFor="review" className="block text-gray-600 dark:text-gray-300 text-sm font-medium mb-2">
-                      Your Review:
-                    </label>
-                    <textarea
-                      id="review"
-                      rows={4}
-                      className="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-md p-3 bg-white dark:bg-gray-700 text-black dark:text-white"
-                      value={userReview}
-                      onChange={(e) => setUserReview(e.target.value)}
-                      placeholder="Write your review here..."
-                    />
-                  </div>
-                  <div className="flex justify-end">
-                    <button
-                      onClick={handleSaveReview}
-                      className="px-4 py-2 text-sm bg-orange-700 text-white rounded-md hover:bg-orange-800 transition-colors"
-                    >
-                      Save Review
-                    </button>
+              <div>
+                <div className="flex items-center mb-4">
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mr-2">Your Rating:</p>
+                  <div className="flex">
+                    {[...Array(5)].map((_, i) => (
+                      <svg
+                        key={i}
+                        className={`w-6 h-6 cursor-pointer ${
+                          i < displayRating ? 'text-orange-700' : 'text-gray-300 dark:text-gray-500'
+                        }`}
+                        onMouseEnter={() => handleStarHover(i + 1)}
+                        onMouseLeave={handleStarLeave}
+                        onClick={() => handleStarClick(i + 1)}
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor"
+                        viewBox="0 0 22 20"
+                      >
+                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                      </svg>
+                    ))}
                   </div>
                 </div>
-              )}
+                <div className="mb-4">
+                  <label htmlFor="review" className="block text-gray-600 dark:text-gray-300 text-sm font-medium mb-2">
+                    Your Review:
+                  </label>
+                  <textarea
+                    id="review"
+                    rows={4}
+                    className="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-md p-3 bg-white dark:bg-gray-700 text-black dark:text-white"
+                    value={userReview}
+                    onChange={(e) => setUserReview(e.target.value)}
+                    placeholder="Write your review here..."
+                  />
+                </div>
+                <div className="flex justify-end">
+                  <button
+                    onClick={handleSaveReview}
+                    className="px-4 py-2 text-sm bg-orange-700 text-white rounded-md hover:bg-orange-800 transition-colors"
+                  >
+                    Save Review
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </>

@@ -1,8 +1,8 @@
 "use client";
 
-import MovieCard from '@/components/MovieCard';
 import { useState } from 'react';
 import { useTheme } from '@/context/ThemeContext';
+import Watchlist from '@/components/Watchlist';
 
 export default function Home() {
   const [showFilters, setShowFilters] = useState(false);
@@ -18,7 +18,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="relative mx-auto w-1/2 -mb-4 z-20"> 
+      <div className="relative mx-auto w-3/4 -mb-4 z-20"> 
         <div className="relative">
           <input 
             type="text" 
@@ -78,16 +78,10 @@ export default function Home() {
           )}
         </div>
       </div>
-      
       <div 
         className="bg-base border border-base text-base backdrop-blur-md rounded-3xl border shadow-xl p-6 md:p-8 z-10"
       >
-        <MovieCard
-          title="The Great Gatsby"
-          imageUrl="https://www.thecommononline.org/wp-content/uploads/2013/06/Screen-Shot-2017-05-31-at-2.19.46-PM.png"
-          rating={0}
-          status='Watch later'
-        />
+        <Watchlist/>
       </div>
     </>
   );
