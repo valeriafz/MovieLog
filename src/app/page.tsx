@@ -7,7 +7,8 @@ import Watchlist from '@/components/Watchlist';
 export default function Home() {
   const [showFilters, setShowFilters] = useState(false);
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
-  const { darkMode } = useTheme(); 
+  const [searchQuery, setSearchQuery] = useState('');
+  const { darkMode } = useTheme();
 
   const filters = [
     { label: 'Watch later', value: 'watch-later' },
@@ -27,6 +28,8 @@ export default function Home() {
               darkMode ? 'focus:ring-white/40' : 'focus:ring-gray-400'
             }`}
             style={{ color: 'var(--text-base)' }}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
           <div className="absolute left-4 top-1/2 transform -translate-y-1/2" style={{ color: 'var(--text-base)' }}>
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -78,10 +81,8 @@ export default function Home() {
           )}
         </div>
       </div>
-      <div 
-        className="bg-base border border-base text-base backdrop-blur-md rounded-3xl border shadow-xl p-6 md:p-8 z-10"
-      >
-        <Watchlist/>
+      <div className="bg-base border border-base text-base backdrop-blur-md rounded-3xl border shadow-xl p-6 md:p-8 z-10">
+        <Watchlist searchQuery={searchQuery} activeFilter={activeFilter} />
       </div>
     </>
   );

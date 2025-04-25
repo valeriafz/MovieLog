@@ -102,15 +102,15 @@ const MovieCard: React.FC<MovieCardProps> = ({
   const displayRating = hoveredRating > 0 ? hoveredRating : userRating;
 
   return (
-    <div className="w-48 shadow-sm text-left relative">
+    <div className="w-30 sm:w-48 shadow-sm text-left relative"> 
       <div onClick={handleOpenModal} className="cursor-pointer">
         <img
-          className="rounded-lg w-48 h-64 object-cover"
+          className="rounded-lg w-full h-42 sm:h-64 object-cover"
           src={imageUrl}
           alt={`Cover of ${title}`}
         />
       </div>
-      <div className="px-3 pb-3 pt-2">
+      <div className="px-2 sm:px-3 pb-2 sm:pb-3 pt-1 sm:pt-2">
         <div onClick={handleOpenModal} className="cursor-pointer">
           <h5 className="text-base font-semibold tracking-tight line-clamp-2 mb-1" style={{ color: 'var(--card-heading)' }}>
             {title}

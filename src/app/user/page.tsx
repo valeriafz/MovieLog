@@ -22,7 +22,11 @@ export default function User() {
   return (
     <div className="bg-base border border-base text-base backdrop-blur-md rounded-3xl shadow-xl p-6 md:p-8 z-10">
       <div className="flex items-center justify-between mb-6">
+      <h2 className="text-2xl font-semibold" style={{ color: 'var(--card-heading)' }}>
+          Your reviews
+        </h2>
         <div className="flex items-center">
+        <span className="mr-3 text-sm font-medium">Try Dark Mode</span>
           <button
             onClick={toggleDarkMode}
             className="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 cursor-pointer"
@@ -30,18 +34,14 @@ export default function User() {
             role="switch"
             aria-checked={darkMode}
           >
-            <span className="sr-only">Toggle dark mode</span>
             <span
               className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
                 darkMode ? 'translate-x-6' : 'translate-x-1'
               }`}
             />
           </button>
-          <span className="ml-3 text-sm font-medium">Try Dark Mode</span>
         </div>
-        <h2 className="text-2xl font-semibold" style={{ color: 'var(--card-heading)' }}>
-          Your reviews
-        </h2>
+       
       </div>
 
       <div className="space-y-4">
@@ -91,7 +91,7 @@ export default function User() {
                     </div>
                   </div>
                   <div className="text-xs" style={{ color: 'var(--card-subtext)' }}>
-                    Reviewed on {movie.dateReviewed || movie.dateAdded}
+                    Reviewed on {movie.dateReviewed?.split('T')[0] || movie.dateAdded.split('T')[0]}
                   </div>
                   <p className="text-sm line-clamp-2" style={{ color: 'var(--card-body)' }}>
                     {movie.review || 'No review text available.'}
