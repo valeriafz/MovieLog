@@ -137,7 +137,7 @@ export default function Add() {
 
         <div className="flex flex-col items-center">
           <label htmlFor="rating" className="block text-sm font-medium w-full max-w-md text-left text-white -mt-2">
-            Rating (You can skip if you haven't watched it yet)
+            Rating (You can skip if you haven&apos;t watched it yet)
           </label>
           <input
             type="number"

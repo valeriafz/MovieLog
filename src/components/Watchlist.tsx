@@ -40,7 +40,6 @@ export default function Watchlist({ searchQuery = '', activeFilter = null }: Wat
     return matchesSearch && matchesFilter;
   });
 
-  // Calculate pagination
   const totalPages = Math.ceil(filteredMovies.length / MOVIES_PER_PAGE);
   const paginatedMovies = filteredMovies.slice(
     (currentPage - 1) * MOVIES_PER_PAGE,

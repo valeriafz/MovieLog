@@ -47,7 +47,7 @@ export default function User() {
       <div className="space-y-4">
         {reviews.length === 0 ? (
           <div className="text-center p-8" style={{ color: 'var(--card-body)' }}>
-            <p>You haven't reviewed any movies yet.</p>
+            <p>You haven&apos;t reviewed any movies yet.</p>
           </div>
         ) : (
           reviews.map((movie) => (
