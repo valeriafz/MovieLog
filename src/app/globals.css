@@ -12,6 +12,8 @@
   --card-body: #1f2937;     /* Tailwind's gray-800 */
   --switch-bg: #e5e7eb;     /* Tailwind's gray-200 */
   --star-empty: #4b5563;    /* Tailwind's gray-600 */
+  --scrollbar-thumb: #9ca3af; /* gray-400 in light mode */
+  --scrollbar-track: rgba(243, 244, 246, 0.2); /* gray-100 in light mode */
 }
 
 .dark {
@@ -25,6 +27,8 @@
   --card-body: #d1d5db;     /* gray-300 */
   --switch-bg: #c2410c;     /* orange-700 */
   --star-empty: #9ca3af;    /* gray-400 */
+  --scrollbar-thumb: #c2410c; /* orange-700 in dark mode */
+  --scrollbar-track: #1f2937; /* gray-800 in dark mode */
 }
 
 .bg-base {
@@ -35,4 +39,28 @@
 }
 .text-base {
   color: var(--text-base);
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin; 
+  scrollbar-color: var(--switch-bg) var(--scrollbar-track); 
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: 6px;
+  border: 2px solid var(--scrollbar-track);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  filter: brightness(110%);
 }
