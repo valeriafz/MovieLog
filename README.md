@@ -1,36 +1,100 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MovieLog - a watchlist app
+
+A Next.js application for managing your movie collection with watchlist tracking, reviews, and dark mode support.
+
+## Features
+
+- 🎬 **Add movies** with titles, images, and ratings
+- 📌 **Organize** by status ("Completed" or "Watch later")
+- ⭐ **Rate and review** watched movies
+- 🔍 **Search and filter** your collection
+- 🌙 **Dark/Light mode** toggle
+- 📱 **Responsive design** for all devices
+
+## App Structure
+
+### Key Routes
+
+- `/` - Homepage displaying all movies with search/filter options
+  ![image](https://github.com/user-attachments/assets/a60c7c16-fd30-44fc-9a48-1ed5d687f484)
+
+- `/add` - Form to add new movies (with image upload/URL)
+  ![image](https://github.com/user-attachments/assets/86457fdd-c7b7-4142-b87f-2f82d4ad65d1)
+
+- `/user` - Personal reviews page with dark mode toggle
+  ![image](https://github.com/user-attachments/assets/fd9862b6-899d-4eac-8f0e-41469b42e408)
+![image](https://github.com/user-attachments/assets/d12159ba-70d2-43cc-b83e-6c28f52320bd)
+
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Node.js 18+
+- npm/yarn/pnpm
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Clone the repository
+   ```bash
+   git clone https://github.com/your-username/movie-watchlist.git
+   ```
+2. Install dependencies
+   ```bash
+   npm install
+   # or
+   yarn install
+   # or
+   pnpm install
+   ```
+3. Run the development server locally
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   # or
+   pnpm dev
+   ```
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## How to Use
+
+### Adding Movies (`/add`)
+1. Enter movie title
+2. Add image (URL or upload)
+3. Optionally add rating if completed
+   - If no rating, movie is marked "Watch later"
+4. Submit to add to your collection
+
+### Managing Movies (`/`)
+- Click the 👁️ icon to:
+  - Mark as "Completed"
+  - Add/edit rating (1-5 stars)
+  - Write a review
+- Use the search bar to find movies
+- Filter by:
+  - Watch later
+  - Completed
+  - Rating (high/low)
+
+### Viewing Reviews (`/user`)
+- Displays all your reviewed movies
+- Toggle dark/light mode in the top-left corner
+
+## Technical Details
+
+- Built with **Next.js 14** (App Router)
+- State management with **localStorage**
+- Styled with **Tailwind CSS**
+- Dark mode using **CSS variables**
+- Responsive grid layout
+
+## Deployment
+
+The app is available on Vercel at https://movie-log-puce.vercel.app
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Tailwind CSS Docs](https://tailwindcss.com/docs)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
