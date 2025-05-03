@@ -3,12 +3,16 @@
 import { useState } from 'react';
 import { useTheme } from '@/context/ThemeContext';
 import Watchlist from '@/components/Watchlist';
+import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const [showFilters, setShowFilters] = useState(false);
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const { darkMode } = useTheme();
+  const { user } = useAuth();
+  const router = useRouter();
 
   const filters = [
     { label: 'Watch later', value: 'watch-later' },
@@ -16,6 +20,10 @@ export default function Home() {
     { label: 'Higher reviewed', value: 'higher-reviewed' },
     { label: 'Lower reviewed', value: 'lower-reviewed' }
   ];
+
+  if (!user) {
+    router.push('/auth/login');
+  }
 
   return (
     <>
