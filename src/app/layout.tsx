@@ -3,6 +3,7 @@ import "./globals.css";
 import Layout from "@/components/Layout";
 import { ThemeProvider } from "@/context/ThemeContext"; 
 import BackgroundImage from "@/components/BackgroundImage";
+import Navbar from "@/components/Navbar";
 
 const ubuntu = Ubuntu({
   subsets: ["latin"],  
@@ -22,11 +23,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${ubuntu.className} antialiased`}>
+      <Navbar/>
         <Layout>
           <ThemeProvider>
             <BackgroundImage/>
-        {children}
-        </ThemeProvider>
+            {children}
+          </ThemeProvider>
         </Layout>
       </body>
     </html>
