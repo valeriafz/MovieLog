@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { UserCircle, X, Menu } from 'lucide-react';
 import { useTheme } from '@/context/ThemeContext';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter} from 'next/navigation';
 
 const Navbar = () => {
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
@@ -15,7 +15,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     setShowLogoutModal(false);
-    router.push('/login');
+    router.push('/auth/login');
   };
 
   const toggleUserDropdown = () => {
@@ -32,9 +32,8 @@ const Navbar = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
-              <div className="ml-3 font-bold text-2xl">MovieLog</div>
+            <Link href="/" className="ml-3 font-bold text-2xl">MovieLog</Link>
             </div>
-
             <div className="hidden md:flex items-center space-x-6">
             <div className="flex items-center">
         <span className="mr-3 text-sm font-medium">Try Dark Mode</span>
