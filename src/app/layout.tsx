@@ -23,13 +23,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${ubuntu.className} antialiased`}>
-      <Navbar/>
+      <ThemeProvider>
+        <Navbar/>
         <Layout>
-          <ThemeProvider>
-            <BackgroundImage/>
+          <BackgroundImage/>
             {children}
-          </ThemeProvider>
         </Layout>
+      </ThemeProvider>
       </body>
     </html>
   );

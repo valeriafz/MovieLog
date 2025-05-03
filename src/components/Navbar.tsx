@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { UserCircle, X, Menu } from 'lucide-react';
+import { useTheme } from '@/context/ThemeContext';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -9,6 +10,7 @@ const Navbar = () => {
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { darkMode, toggleDarkMode } = useTheme();
   const router = useRouter();
 
   const handleLogout = () => {
@@ -30,10 +32,26 @@ const Navbar = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
-              <div className="ml-3 font-bold text-xl">MovieLog</div>
+              <div className="ml-3 font-bold text-2xl">MovieLog</div>
             </div>
 
             <div className="hidden md:flex items-center space-x-6">
+            <div className="flex items-center">
+        <span className="mr-3 text-sm font-medium">Try Dark Mode</span>
+          <button
+            onClick={toggleDarkMode}
+            className="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 cursor-pointer"
+            style={{ backgroundColor: 'var(--switch-bg)' }}
+            role="switch"
+            aria-checked={darkMode}
+          >
+            <span
+              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                darkMode ? 'translate-x-6' : 'translate-x-1'
+              }`}
+            />
+          </button>
+        </div>
               <Link href="/" className="hover:text-orange-700 px-2 py-1">Home</Link>
               <Link href="/add" className="hover:text-orange-700 px-2 py-1">Add Movie</Link>
               <Link href="/user" className="hover:text-orange-700 px-2 py-1">Your Reviews</Link>

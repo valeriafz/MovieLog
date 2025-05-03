@@ -1,11 +1,9 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { useTheme } from "@/context/ThemeContext";
 import { Movie } from '@/types/movie';
 
 export default function User() {
-  const { darkMode, toggleDarkMode } = useTheme();
   const [reviews, setReviews] = useState<Movie[]>([]);
 
   useEffect(() => {
@@ -25,23 +23,6 @@ export default function User() {
       <h2 className="text-2xl font-semibold" style={{ color: 'var(--card-heading)' }}>
           Your reviews
         </h2>
-        <div className="flex items-center">
-        <span className="mr-3 text-sm font-medium">Try Dark Mode</span>
-          <button
-            onClick={toggleDarkMode}
-            className="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 cursor-pointer"
-            style={{ backgroundColor: 'var(--switch-bg)' }}
-            role="switch"
-            aria-checked={darkMode}
-          >
-            <span
-              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                darkMode ? 'translate-x-6' : 'translate-x-1'
-              }`}
-            />
-          </button>
-        </div>
-       
       </div>
 
       <div className="space-y-4">
