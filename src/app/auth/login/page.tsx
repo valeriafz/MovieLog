@@ -15,9 +15,9 @@ const Login = () => {
     e.preventDefault();
 
     if (email && password) {
-      const user = { username: email.split('@')[0], email }; // Example of user data, adjust as needed
+      const user = { username: email.split('@')[0], email }; 
       login(user);
-      router.push('/'); // Redirect to home or dashboard after login
+      router.push('/'); 
     }
   };
 

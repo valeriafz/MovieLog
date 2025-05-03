@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { UserCircle, X, Menu } from 'lucide-react';
 import { useTheme } from '@/context/ThemeContext';
 import Link from 'next/link';
-import { useRouter} from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
 
 const Navbar = () => {
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
@@ -13,8 +14,11 @@ const Navbar = () => {
   const { darkMode, toggleDarkMode } = useTheme();
   const router = useRouter();
 
+  const { user, logout } = useAuth();
+
   const handleLogout = () => {
     setShowLogoutModal(false);
+    logout(); 
     router.push('/auth/login');
   };
 
@@ -26,31 +30,35 @@ const Navbar = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  if (!user) {
+    return null;
+  }
+
   return (
     <>
       <nav className="bg-base text-base border border-white/50 backdrop-blur-md shadow-lg relative z-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
-            <Link href="/" className="ml-3 font-bold text-2xl">MovieLog</Link>
+              <Link href="/" className="ml-3 font-bold text-2xl">MovieLog</Link>
             </div>
             <div className="hidden md:flex items-center space-x-6">
-            <div className="flex items-center">
-        <span className="mr-3 text-sm font-medium">Try Dark Mode</span>
-          <button
-            onClick={toggleDarkMode}
-            className="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 cursor-pointer"
-            style={{ backgroundColor: 'var(--switch-bg)' }}
-            role="switch"
-            aria-checked={darkMode}
-          >
-            <span
-              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                darkMode ? 'translate-x-6' : 'translate-x-1'
-              }`}
-            />
-          </button>
-        </div>
+              <div className="flex items-center">
+                <span className="mr-3 text-sm font-medium">Try Dark Mode</span>
+                <button
+                  onClick={toggleDarkMode}
+                  className="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 cursor-pointer"
+                  style={{ backgroundColor: 'var(--switch-bg)' }}
+                  role="switch"
+                  aria-checked={darkMode}
+                >
+                  <span
+                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                      darkMode ? 'translate-x-6' : 'translate-x-1'
+                    }`}
+                  />
+                </button>
+              </div>
               <Link href="/" className="hover:text-orange-700 px-2 py-1">Home</Link>
               <Link href="/add" className="hover:text-orange-700 px-2 py-1">Add Movie</Link>
               <Link href="/user" className="hover:text-orange-700 px-2 py-1">Your Reviews</Link>
@@ -117,8 +125,8 @@ const Navbar = () => {
 
       {showLogoutModal && (
         <div className="fixed inset-0 z-50">
-        <div className="absolute inset-0 bg-black opacity-60"></div>
-        <div className="relative z-10 flex items-center justify-center min-h-screen">
+          <div className="absolute inset-0 bg-black opacity-60"></div>
+          <div className="relative z-10 flex items-center justify-center min-h-screen">
             <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-xl max-w-sm w-full transform transition-all duration-300 ease-in-out scale-95 opacity-0 animate-fadeInScale">
               <h2 className="text-base flex justify-center text-lg font-semibold mb-4">
                 Are you sure you want to log out?
