@@ -48,12 +48,7 @@ export default function Home() {
           
           {showFilters && (
             <div 
-              className="absolute right-0 mt-2 w-48 rounded-md shadow-lg z-50"
-              style={{
-                backgroundColor: 'var(--card-bg)',
-                borderColor: 'var(--card-border)',
-                borderWidth: '1px'
-              }}
+              className="bg-white dark:bg-gray-800 rounded-lg absolute right-0 mt-2 w-48 shadow-lg z-50"
             >
               <div className="py-1">
                 {filters.map((filter) => (

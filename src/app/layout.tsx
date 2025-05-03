@@ -2,7 +2,9 @@ import { Ubuntu } from "next/font/google";
 import "./globals.css";
 import Layout from "@/components/Layout";
 import { ThemeProvider } from "@/context/ThemeContext"; 
+import { AuthProvider } from '@/context/AuthContext';
 import BackgroundImage from "@/components/BackgroundImage";
+import Navbar from "@/components/Navbar";
 
 const ubuntu = Ubuntu({
   subsets: ["latin"],  
@@ -22,12 +24,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${ubuntu.className} antialiased`}>
+      <AuthProvider>
+      <ThemeProvider>
+        <Navbar/>
         <Layout>
-          <ThemeProvider>
-            <BackgroundImage/>
-        {children}
-        </ThemeProvider>
+          <BackgroundImage/>
+            {children}
         </Layout>
+      </ThemeProvider>
+      </AuthProvider>
       </body>
     </html>
   );

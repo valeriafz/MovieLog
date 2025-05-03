@@ -50,7 +50,7 @@ export default function Watchlist({ searchQuery = '', activeFilter = null }: Wat
         Your Movies ({filteredMovies.length})
       </h2>
 
-      <div className="overflow-y-auto custom-scrollbar" style={{ maxHeight: '60vh' }}>
+      <div className="overflow-y-auto custom-scrollbar" style={{ maxHeight: '50vh' }}>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-5 justify-center">
           {filteredMovies.map(movie => (
             <div className="flex justify-center" key={movie.id}>
