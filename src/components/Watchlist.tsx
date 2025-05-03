@@ -3,6 +3,7 @@
 import { Movie } from '@/types/movie';
 import { useState, useEffect } from 'react';
 import MovieCard from './MovieCard';
+import { useAuth } from '@/context/AuthContext';
 
 interface WatchlistProps {
   searchQuery?: string;
@@ -11,6 +12,7 @@ interface WatchlistProps {
 
 export default function Watchlist({ searchQuery = '', activeFilter = null }: WatchlistProps) {
   const [movies, setMovies] = useState<Movie[]>([]);
+  const { user } = useAuth();
 
   useEffect(() => {
     const storedMovies = localStorage.getItem('watchlist');
@@ -36,7 +38,7 @@ export default function Watchlist({ searchQuery = '', activeFilter = null }: Wat
     return matchesSearch && matchesFilter;
   });
 
-  if (filteredMovies.length === 0) {
+  if (filteredMovies.length === 0 || !user) {
     return (
       <div className="text-center p-8" style={{ color: 'var(--text-base)' }}>
         <p>No movies found matching your criteria.</p>

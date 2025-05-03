@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTheme } from '@/context/ThemeContext';
 import Watchlist from '@/components/Watchlist';
 import { useAuth } from '@/context/AuthContext';
@@ -21,9 +21,11 @@ export default function Home() {
     { label: 'Lower reviewed', value: 'lower-reviewed' }
   ];
 
-  if (!user) {
-    router.push('/auth/login');
-  }
+  useEffect(() => {
+    if (!user) {
+      router.push('/auth/login');
+    }
+  }, [user]);
 
   return (
     <>
