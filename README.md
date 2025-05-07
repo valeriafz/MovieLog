@@ -16,14 +16,13 @@ A Next.js application for managing your movie collection with watchlist tracking
 ### Key Routes
 
 - `/` - Homepage displaying all movies with search/filter options
-  ![image](https://github.com/user-attachments/assets/a60c7c16-fd30-44fc-9a48-1ed5d687f484)
+- ![image](https://github.com/user-attachments/assets/f2cb8c30-7d55-462a-9e13-e0b50858addb)
 
 - `/add` - Form to add new movies (with image upload/URL)
-  ![image](https://github.com/user-attachments/assets/86457fdd-c7b7-4142-b87f-2f82d4ad65d1)
+ ![image](https://github.com/user-attachments/assets/960a2b42-db5a-4755-b247-201d64db506e)
 
-- `/user` - Personal reviews page with dark mode toggle
-  ![image](https://github.com/user-attachments/assets/fd9862b6-899d-4eac-8f0e-41469b42e408)
-![image](https://github.com/user-attachments/assets/d12159ba-70d2-43cc-b83e-6c28f52320bd)
+- `/user` - Personal reviews page 
+![image](https://github.com/user-attachments/assets/ee3ff24c-84de-40ba-a8b3-6412d29e0cd2)
 
 
 ## Getting Started
@@ -79,11 +78,14 @@ A Next.js application for managing your movie collection with watchlist tracking
 
 ### Viewing Reviews (`/user`)
 - Displays all your reviewed movies
-- Toggle dark/light mode in the top-left corner
+
+### Change dark mode theme (via navbar)
+- Toggle between dark and light theme
+- ![image](https://github.com/user-attachments/assets/545dbdc2-27f9-4a51-8000-0329af52a53f)
+
 
 ## Technical Details
 
-- Built with **Next.js 14** (App Router)
 - State management with **localStorage**
 - Styled with **Tailwind CSS**
 - Dark mode using **CSS variables**
