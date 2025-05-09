@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const decoded = jwtDecode<DecodedToken>(token);
         setUser({ email: decoded.email });
       } catch (error: unknown) {
-        console.error("Invalid token");
+        console.log(error);
         removeToken();
         setUser(null);
       }

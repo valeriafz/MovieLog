@@ -27,6 +27,7 @@ export default function User() {
         
         setReviews(completedReviews);
       } catch (error: unknown) {
+        console.log(error);
         setError('Failed to load your reviews. Please try again.');
       } finally {
         setIsLoading(false);

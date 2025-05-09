@@ -23,6 +23,7 @@ export default function Watchlist({ searchQuery = '', activeFilter = null }: Wat
       const response = await api.get('/movies');
       setMovies(response.data);
     } catch (error: unknown) {
+      console.log(error)
       setError('Failed to load movies. Please try again.');
     } finally {
       setIsLoading(false);
