@@ -69,6 +69,11 @@ export class MoviesService {
     throw new ForbiddenException('You are not authorized to update this movie');
   }
 
+  if (updateMovieDto.rating !== undefined || updateMovieDto.review !== undefined) {
+    const today = new Date().toISOString().split('T')[0];
+    updateMovieDto.dateReviewed = today;
+  }
+
   if (updateMovieDto.rating !== undefined) {
     updateMovieDto.status = updateMovieDto.rating === 0 ? 'Watch later' : 'Completed';
   }

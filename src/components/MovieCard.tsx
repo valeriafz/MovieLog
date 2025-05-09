@@ -56,33 +56,57 @@ const MovieCard: React.FC<MovieCardProps> = ({
   };
 
   const handleSaveReview = async () => {
-    if (!id) return;
-    
-    setIsLoading(true);
-    setError(null);
-    
-    try {
-      const updatedMovie = {
-        rating: userRating,
-        status: userRating > 0 ? 'Completed' : 'Watch later',
-        review: userReview,
-      };
+  if (!id) {
+    setError('Movie ID is missing');
+    return;
+  }
 
-      await api.put(`/movies/${id}`, updatedMovie);
-      
-      setIsModalOpen(false);
-      document.body.style.overflow = 'auto';
-      
-      if (onUpdate) {
-        onUpdate(); 
-      }
-    } catch (err) {
-      console.error('Failed to update movie:', err);
-      setError('Failed to save changes. Please try again.');
-    } finally {
-      setIsLoading(false);
+  setIsLoading(true);
+  setError(null);
+
+  try {
+    const updateData = {
+      rating: userRating,
+      review: userReview
+    };
+
+    const response = await api.put(`/movies/${id}`, updateData);
+    
+    console.log('Updated movie:', response.data);
+    
+    setIsModalOpen(false);
+    document.body.style.overflow = 'auto';
+    
+    if (onUpdate) {
+      onUpdate(); 
     }
-  };
+  } catch (error: unknown) {
+    let errorMessage = 'Failed to save changes. Please try again.';
+    
+    if (error instanceof Error) {
+      console.error('Error:', error.message);
+      
+      if ('response' in error) {
+        const axiosError = error as { 
+          response?: {
+            status: number;
+            data?: { message?: string };
+          };
+        };
+        
+        if (axiosError.response?.status === 401) {
+          errorMessage = 'Session expired. Please login again.';
+        } else if (axiosError.response?.status === 400) {
+          errorMessage = axiosError.response.data?.message || 'Invalid data format';
+        }
+      }
+    }
+    
+    setError(errorMessage);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
