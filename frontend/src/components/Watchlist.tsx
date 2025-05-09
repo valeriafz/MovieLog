@@ -22,7 +22,8 @@ export default function Watchlist({ searchQuery = '', activeFilter = null }: Wat
     try {
       const response = await api.get('/movies');
       setMovies(response.data);
-    } catch (err) {
+    } catch (error: unknown) {
+      console.log(error)
       setError('Failed to load movies. Please try again.');
     } finally {
       setIsLoading(false);
@@ -34,7 +35,7 @@ export default function Watchlist({ searchQuery = '', activeFilter = null }: Wat
   }, []); 
 
   const handleMovieUpdate = () => {
-    fetchMovies(); // Refresh the list after updates
+    fetchMovies(); 
   };
 
   const filteredMovies = movies.filter(movie => {

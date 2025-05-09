@@ -22,7 +22,8 @@ const Login = () => {
       try {
         await login(email, password);
         router.push("/");
-      } catch (err: any) {
+      } catch (error: unknown) {
+        console.log(error)
         setError("Invalid email or password");
       } finally {
         setLoading(false);

@@ -29,7 +29,7 @@ export default function Add() {
         dateAdded: today
       };
 
-      const response = await api.post('/movies', newMovie);
+      await api.post('/movies', newMovie);
       
       setMovieName('');
       setImageUrl('');
