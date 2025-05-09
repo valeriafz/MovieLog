@@ -3,15 +3,14 @@
 import { useState, useEffect } from 'react';
 import { useTheme } from '@/context/ThemeContext';
 import Watchlist from '@/components/Watchlist';
-import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
+import { getToken } from "../utils/api";
 
 export default function Home() {
   const [showFilters, setShowFilters] = useState(false);
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const { darkMode } = useTheme();
-  const { user } = useAuth();
   const router = useRouter();
 
   const filters = [
@@ -22,10 +21,11 @@ export default function Home() {
   ];
 
   useEffect(() => {
-    if (!user) {
+    const token = getToken();
+    if (!token) {
       router.push('/auth/login');
     }
-  }, [user]);
+  },);
 
   return (
     <>
