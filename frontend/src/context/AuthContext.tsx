@@ -6,7 +6,7 @@ import { jwtDecode } from "jwt-decode";
 
 interface DecodedToken {
   email: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface User {
@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       try {
         const decoded = jwtDecode<DecodedToken>(token);
         setUser({ email: decoded.email });
-      } catch (err) {
+      } catch (error: unknown) {
         console.error("Invalid token");
         removeToken();
         setUser(null);

@@ -18,8 +18,8 @@ const Register = () => {
       try {
         await register(email, password);
         router.push("/auth/login");
-      } catch (error) {
-        console.error("Registration error:", error);
+      } catch (error: unknown) {
+        console.error('Operation failed:', error instanceof Error ? error.message : String(error));
       }
     }
   };
