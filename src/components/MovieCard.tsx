@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
+import api from '@/utils/api'; 
 
 interface MovieCardProps {
   title: string;
@@ -8,7 +9,9 @@ interface MovieCardProps {
   rating: number;
   status: 'Completed' | 'Watch later';
   review?: string;
-  id?: number; // Added ID for localStorage updates
+  id?: number;
+  userId?: string;
+  onUpdate?: () => void; 
 }
 
 const MovieCard: React.FC<MovieCardProps> = ({ 
@@ -17,12 +20,15 @@ const MovieCard: React.FC<MovieCardProps> = ({
   rating, 
   status, 
   review = '',
-  id
+  id,
+  onUpdate
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userRating, setUserRating] = useState(status === 'Completed' ? rating : 0);
   const [userReview, setUserReview] = useState(review);
   const [hoveredRating, setHoveredRating] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const modalRef = useRef<HTMLDivElement>(null);
 
   const handleOpenModal = (e: React.MouseEvent) => {
@@ -33,6 +39,7 @@ const MovieCard: React.FC<MovieCardProps> = ({
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+    setError(null);
     document.body.style.overflow = 'auto';
   };
 
@@ -48,37 +55,33 @@ const MovieCard: React.FC<MovieCardProps> = ({
     setHoveredRating(0);
   };
 
-  const handleSaveReview = () => {
-    // Create the updated movie object
-    const updatedMovie = {
-      id,
-      title,
-      imageUrl,
-      rating: userRating,
-      status: userRating > 0 ? 'Completed' : 'Watch later',
-      review: userReview,
-      dateUpdated: new Date().toISOString()
-    };
-
-    // Get current watchlist from localStorage
-    const storedMovies = localStorage.getItem('watchlist');
-    if (storedMovies) {
-      const watchlist = JSON.parse(storedMovies);
-      
-      // Find and update the movie
-      const updatedWatchlist = watchlist.map((movie: { id: number | undefined; }) => 
-        movie.id === id ? { ...movie, ...updatedMovie } : movie
-      );
-      
-      // Save back to localStorage
-      localStorage.setItem('watchlist', JSON.stringify(updatedWatchlist));
-    }
-
-    console.log('Saving review:', { title, userRating, userReview });
-    setIsModalOpen(false);
-    document.body.style.overflow = 'auto';
+  const handleSaveReview = async () => {
+    if (!id) return;
     
-    window.location.reload();
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      const updatedMovie = {
+        rating: userRating,
+        status: userRating > 0 ? 'Completed' : 'Watch later',
+        review: userReview,
+      };
+
+      await api.put(`/movies/${id}`, updatedMovie);
+      
+      setIsModalOpen(false);
+      document.body.style.overflow = 'auto';
+      
+      if (onUpdate) {
+        onUpdate(); 
+      }
+    } catch (err) {
+      console.error('Failed to update movie:', err);
+      setError('Failed to save changes. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -143,37 +146,37 @@ const MovieCard: React.FC<MovieCardProps> = ({
             onClick={handleOpenModal}
           >
             <div 
-  className={`transition-all duration-200 w-7 h-7 flex items-center justify-center rounded-full ${
-    status === 'Completed' 
-      ? 'bg-white text-orange-700' 
-      : 'group-hover:bg-white group-active:bg-white'
-  }`}
->
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className={`h-5 w-5 ${
-      status === 'Completed' 
-        ? 'text-orange-700' 
-        : 'text-black group-hover:text-orange-700 group-active:text-orange-700'
-    } transition-colors duration-200`}
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-    />
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-    />
-  </svg>
-</div>
+              className={`transition-all duration-200 w-7 h-7 flex items-center justify-center rounded-full ${
+                status === 'Completed' 
+                  ? 'bg-white text-orange-700' 
+                  : 'group-hover:bg-white group-active:bg-white'
+              }`}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className={`h-5 w-5 ${
+                  status === 'Completed' 
+                    ? 'text-orange-700' 
+                    : 'text-black group-hover:text-orange-700 group-active:text-orange-700'
+                } transition-colors duration-200`}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                />
+              </svg>
+            </div>
           </button>
         </div>
       </div>
@@ -201,6 +204,12 @@ const MovieCard: React.FC<MovieCardProps> = ({
                   </svg>
                 </button>
               </div>
+              
+              {error && (
+                <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md text-sm">
+                  {error}
+                </div>
+              )}
               
               <div>
                 <div className="flex items-center mb-4">
@@ -241,9 +250,10 @@ const MovieCard: React.FC<MovieCardProps> = ({
                 <div className="flex justify-end">
                   <button
                     onClick={handleSaveReview}
-                    className="px-4 py-2 text-sm bg-orange-700 text-white rounded-md hover:bg-orange-800 transition-colors"
+                    disabled={isLoading}
+                    className="cursor-pointer px-4 py-2 text-sm bg-orange-700 text-white rounded-md hover:bg-orange-800 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
                   >
-                    Save Review
+                    {isLoading ? 'Saving...' : 'Save Review'}
                   </button>
                 </div>
               </div>

@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import { useAuth } from "@/context/AuthContext"; // Importing useAuth
+import { useAuth } from "@/context/AuthContext"; 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 const Register = () => {
-  const { register } = useAuth(); // Access the register function from AuthContext
+  const { register } = useAuth(); 
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
