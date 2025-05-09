@@ -1,45 +1,62 @@
 "use client";
 
-import { Movie } from '@/types/movie';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import api from '@/utils/api';
+import { useRouter } from 'next/navigation';
 
 export default function Add() {
   const [isUploading, setIsUploading] = useState(false);
   const [movieName, setMovieName] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [rating, setRating] = useState('');
-  const [movies, setMovies] = useState<Movie[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
+  const router = useRouter();
 
-  useEffect(() => {
-    const storedMovies = localStorage.getItem('watchlist');
-    if (storedMovies) {
-      setMovies(JSON.parse(storedMovies));
-    }
-  }, []);
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    const newMovie: Movie = {
-      id: Date.now(), 
-      title: movieName,
-      imageUrl: imageUrl || 'https://via.placeholder.com/300x450?text=No+Image',
-      rating: rating ? parseInt(rating, 10) : 0,
-      status: rating ? 'Completed' : 'Watch later',
-      review: '',
-      dateAdded: new Date().toISOString()
-    };
-    
-    const updatedMovies = [...movies, newMovie];
-    
-    localStorage.setItem('watchlist', JSON.stringify(updatedMovies));
-    
-    setMovies(updatedMovies);
-    setMovieName('');
-    setImageUrl('');
-    setRating('');
-    
-    alert(`"${movieName}" added to your watchlist!`);
+    setIsSubmitting(true);
+    setError('');
+
+    try {
+      const today = new Date().toISOString().split('T')[0];
+      
+      const newMovie = {
+        title: movieName,
+        imageUrl: imageUrl || 'https://via.placeholder.com/300x450?text=No+Image',
+        rating: rating ? parseInt(rating, 10) : 0,
+        status: rating ? 'Completed' : 'Watch later',
+        dateAdded: today
+      };
+
+      const response = await api.post('/movies', newMovie);
+      
+      setMovieName('');
+      setImageUrl('');
+      setRating('');
+     
+      router.push('/');
+      
+    } catch (err: unknown) {
+      let errorMessage = 'Failed to add movie. Please try again.';
+      
+      if (typeof err === 'object' && err !== null && 'response' in err) {
+        const axiosError = err as { 
+          response?: {
+            status: number;
+            data?: { message?: string };
+          };
+        };
+        
+        if (axiosError.response?.data?.message) {
+          errorMessage = axiosError.response.data.message;
+        }
+      }
+      
+      setError(errorMessage);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,6 +73,12 @@ export default function Add() {
       <h2 className="text-2xl font-semibold text-center mb-8" style={{ color: 'var(--card-heading)' }}>
         Add new movie to watchlist
       </h2>
+
+      {error && (
+        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md text-sm text-center">
+          {error}
+        </div>
+      )}
 
       <form className="space-y-6" onSubmit={handleSubmit}>
         <div className="flex flex-col items-center">
@@ -160,9 +183,10 @@ export default function Add() {
         <div className="flex justify-center pt-4">
           <button
             type="submit"
-            className="w-1/2 max-w-md bg-orange-700 hover:bg-orange-800 text-white font-semibold py-3 px-6 rounded-3xl transition-all shadow-lg"
+            disabled={isSubmitting}
+            className="cursor-pointer w-1/2 max-w-md bg-orange-700 hover:bg-orange-800 text-white font-semibold py-3 px-6 rounded-3xl transition-all shadow-lg disabled:opacity-70 disabled:cursor-not-allowed"
           >
-            Add Movie
+            {isSubmitting ? 'Adding...' : 'Add Movie'}
           </button>
         </div>
       </form>

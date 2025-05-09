@@ -2,25 +2,80 @@
 
 import { useState, useEffect } from 'react';
 import { Movie } from '@/types/movie';
+import api from '@/utils/api'; 
 
 export default function User() {
   const [reviews, setReviews] = useState<Movie[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    const storedMovies = localStorage.getItem('watchlist');
-    if (storedMovies) {
-      const allMovies = JSON.parse(storedMovies);
-      const completedReviews = allMovies.filter(
-        (movie: Movie) => movie.status === 'Completed' && movie.review
-      );
-      setReviews(completedReviews);
-    }
+    const fetchReviewedMovies = async () => {
+      try {
+        setIsLoading(true);
+        setError('');
+        
+        const response = await api.get('/movies');
+        const allMovies = response.data;
+        
+        const completedReviews = allMovies.filter(
+          (movie: Movie) => 
+            movie.status === 'Completed' && 
+            movie.review &&
+            movie.review.trim() !== ''
+        );
+        
+        setReviews(completedReviews);
+      } catch (err) {
+        setError('Failed to load your reviews. Please try again.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchReviewedMovies();
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className="bg-base border border-base text-base backdrop-blur-md rounded-3xl shadow-xl p-6 md:p-8 z-10">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-semibold" style={{ color: 'var(--card-heading)' }}>
+            Your reviews
+          </h2>
+        </div>
+        <div className="text-center p-8" style={{ color: 'var(--card-body)' }}>
+          <p>Loading your reviews...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-base border border-base text-base backdrop-blur-md rounded-3xl shadow-xl p-6 md:p-8 z-10">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-semibold" style={{ color: 'var(--card-heading)' }}>
+            Your reviews
+          </h2>
+        </div>
+        <div className="text-center p-8" style={{ color: 'var(--card-body)' }}>
+          <p className="text-red-500 mb-2">{error}</p>
+          <button 
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-orange-700 text-white rounded-md hover:bg-orange-800"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-base border border-base text-base backdrop-blur-md rounded-3xl shadow-xl p-6 md:p-8 z-10">
       <div className="flex items-center justify-between mb-6">
-      <h2 className="text-2xl font-semibold" style={{ color: 'var(--card-heading)' }}>
+        <h2 className="text-2xl font-semibold" style={{ color: 'var(--card-heading)' }}>
           Your reviews
         </h2>
       </div>
@@ -28,7 +83,7 @@ export default function User() {
       <div className="space-y-4">
         {reviews.length === 0 ? (
           <div className="text-center p-8" style={{ color: 'var(--card-body)' }}>
-            <p>You haven&apos;t reviewed any movies yet.</p>
+            <p>You haven't reviewed any movies yet.</p>
           </div>
         ) : (
           reviews.map((movie) => (
