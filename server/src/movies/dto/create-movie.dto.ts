@@ -12,16 +12,19 @@ export class CreateMovieDto {
   @IsUrl()
   readonly imageUrl: string;
 
+  @IsOptional()
   @IsNumber()
-  @Min(0)
+  @Min(0) 
   @Max(5)
-  readonly rating: number;
+  readonly rating?: number;
 
+  @IsOptional()
   @IsEnum(['Completed', 'Watch later'])
-  readonly status: MovieStatus;
-
+  status?: MovieStatus;
+  
+  @IsOptional()
   @IsString()
-  readonly review: string;
+  readonly review?: string;
 
   @IsOptional()
   @Matches(/^\d{4}-\d{2}-\d{2}$/, { message: 'Date must be in YYYY-MM-DD format' })

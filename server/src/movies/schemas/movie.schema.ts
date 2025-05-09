@@ -5,9 +5,18 @@ export type MovieDocument = Movie & Document;
 
 export type MovieStatus = 'Completed' | 'Watch later';
 
-@Schema()
+@Schema({ 
+  timestamps: false,
+  toJSON: {
+    transform: (doc, ret) => {
+      delete ret._id;
+      delete ret.__v;
+      return ret;
+    }
+  }
+})
 export class Movie {
-  @Prop({ type: Number, required: true })
+  @Prop({ required: true, unique: true })
   id: number;
 
   @Prop({ required: true })
@@ -25,7 +34,7 @@ export class Movie {
   @Prop()
   review: string;
 
-  @Prop({ required: true })
+  @Prop()
   dateAdded: string;
 
   @Prop()

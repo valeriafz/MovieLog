@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppService } from './app.service';
 import databaseConfig from './config/database.config';
+import { MoviesModule } from "./movies/movies.module";
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import databaseConfig from './config/database.config';
         };
       },
     }),
+    MoviesModule, 
   ],
   providers: [AppService],
 })
