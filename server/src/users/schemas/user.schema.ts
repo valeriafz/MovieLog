@@ -5,6 +5,10 @@ export type UserDocument = User & Document;
 
 @Schema()
 export class User {
+  toObject(): { [x: string]: any; password: any; } {
+      throw new Error('Method not implemented.');
+  }
+  
   @Prop({ required: true, unique: true })
   email: string;
 

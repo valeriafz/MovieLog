@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 
 export type MovieDocument = Movie & Document;
 
@@ -16,6 +16,10 @@ export type MovieStatus = 'Completed' | 'Watch later';
   }
 })
 export class Movie {
+  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  userId: string;
+
+
   @Prop({ required: true, unique: true })
   id: number;
 
