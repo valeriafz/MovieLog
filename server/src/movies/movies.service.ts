@@ -13,14 +13,26 @@ export class MoviesService {
     @InjectModel(Counter.name) private counterModel: Model<CounterDocument>,
   ) {}
 
-  async findAllByUser(userId: string): Promise<Movie[]> {
-    return this.movieModel.find({ userId }).sort({ id: 1 }).exec();
-  }
+  async findAllByUser(userId: string, page = 1, limit = 10): Promise<Movie[]> {
+  const skip = (page - 1) * limit;
+  return this.movieModel
+    .find({ userId })
+    .sort({ id: 1 })
+    .skip(skip)
+    .limit(limit)
+    .exec();
+}
 
-  // Method to get all movies (for Admins)
-  async findAll(): Promise<Movie[]> {
-    return this.movieModel.find().sort({ id: 1 }).exec();
-  }
+async findAll(page = 1, limit = 10): Promise<Movie[]> {
+  const skip = (page - 1) * limit;
+  return this.movieModel
+    .find()
+    .sort({ id: 1 })
+    .skip(skip)
+    .limit(limit)
+    .exec();
+}
+
 
   async findOne(id: number, userId: string): Promise<Movie> {
     const movie = await this.movieModel.findOne({ id, userId }).exec();

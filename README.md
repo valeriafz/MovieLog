@@ -69,7 +69,7 @@ A Next.js frontend with NestJS backend application for managing your movie colle
 ### Frontend Setup
 1. Clone the repository
    ```bash
-   git clone https://github.com/your-username/movie-watchlist.git
+   git clone https://github.com/valeriafz/MovieLog.git
    ```
 2. Install dependencies
    ```bash

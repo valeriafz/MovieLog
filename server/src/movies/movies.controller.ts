@@ -7,7 +7,7 @@ import {
   UseGuards,
   Param,
   Put,
-  ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
@@ -31,15 +31,21 @@ export class MoviesController {
   }
 
   @Get()
-  async findAll(@Request() req): Promise<Movie[]> {
+  async findAll(
+     @Query('page') page: number = 1,
+     @Query('limit') limit: number = 10,
+    @Request() req
+  ): Promise<Movie[]> {
     const userId = req.user.userId;
-    return this.moviesService.findAllByUser(userId);
+    return this.moviesService.findAllByUser(userId, page, limit);
   }
 
   @Get('admin')
   @Roles(Role.ADMIN)  
-  async findAllForAdmin(): Promise<Movie[]> {
-    return this.moviesService.findAll();
+  async findAllForAdmin(@Query('page') page: number = 1,
+     @Query('limit') limit: number = 10,
+    ): Promise<Movie[]> {
+    return this.moviesService.findAll(page, limit);
   }
 
   @Put(':id')
