@@ -27,14 +27,4 @@ export class AppService implements OnModuleInit {
       this.dbConnectionStatus = false;
     }
   }
-
-  getHello(): string {
-    return 'Welcome to MovieLog API!';
-  }
-
-  getDatabaseStatus(): { status: string; } {
-    return {
-      status: this.dbConnectionStatus ? 'Connected' : 'Disconnected',
-    };
-  }
 }

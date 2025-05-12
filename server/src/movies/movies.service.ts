@@ -17,6 +17,11 @@ export class MoviesService {
     return this.movieModel.find({ userId }).sort({ id: 1 }).exec();
   }
 
+  // Method to get all movies (for Admins)
+  async findAll(): Promise<Movie[]> {
+    return this.movieModel.find().sort({ id: 1 }).exec();
+  }
+
   async findOne(id: number, userId: string): Promise<Movie> {
     const movie = await this.movieModel.findOne({ id, userId }).exec();
     if (!movie) {
@@ -31,7 +36,7 @@ export class MoviesService {
       { $inc: { seq: 1 } },
       { new: true, upsert: true }
     ).exec();
-    
+
     return counter.seq;
   }
 
@@ -59,35 +64,35 @@ export class MoviesService {
   }
 
   async update(id: number, updateMovieDto: UpdateMovieDto, userId: string): Promise<Movie> {
-  const movie = await this.movieModel.findOne({ id }).exec();
+    const movie = await this.movieModel.findOne({ id }).exec();
 
-  if (!movie) {
-    throw new NotFoundException(`Movie with ID ${id} not found`);
+    if (!movie) {
+      throw new NotFoundException(`Movie with ID ${id} not found`);
+    }
+
+    if (movie.userId.toString() !== userId) {
+      throw new ForbiddenException('You are not authorized to update this movie');
+    }
+
+    if (updateMovieDto.rating !== undefined || updateMovieDto.review !== undefined) {
+      const today = new Date().toISOString().split('T')[0];
+      updateMovieDto.dateReviewed = today;
+    }
+
+    if (updateMovieDto.rating !== undefined) {
+      updateMovieDto.status = updateMovieDto.rating === 0 ? 'Watch later' : 'Completed';
+    }
+
+    const updatedMovie = await this.movieModel
+      .findOneAndUpdate({ id }, updateMovieDto, { new: true })
+      .exec();
+
+    if (!updatedMovie) {
+      throw new NotFoundException(`Movie with ID ${id} not found`);
+    }
+
+    return updatedMovie;
   }
-
-  if (movie.userId.toString() !== userId) {
-    throw new ForbiddenException('You are not authorized to update this movie');
-  }
-
-  if (updateMovieDto.rating !== undefined || updateMovieDto.review !== undefined) {
-    const today = new Date().toISOString().split('T')[0];
-    updateMovieDto.dateReviewed = today;
-  }
-
-  if (updateMovieDto.rating !== undefined) {
-    updateMovieDto.status = updateMovieDto.rating === 0 ? 'Watch later' : 'Completed';
-  }
-
-  const updatedMovie = await this.movieModel
-    .findOneAndUpdate({ id }, updateMovieDto, { new: true })
-    .exec();
-
-  if (!updatedMovie) {
-    throw new NotFoundException(`Movie with ID ${id} not found`);
-  }
-
-  return updatedMovie;
-}
 
   async findByStatus(status: 'Completed' | 'Watch later', userId: string): Promise<Movie[]> {
     return this.movieModel.find({ status, userId }).sort({ id: 1 }).exec();

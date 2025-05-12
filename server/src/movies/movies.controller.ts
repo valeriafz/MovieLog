@@ -14,8 +14,9 @@ import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie } from './schemas/movie.schema';
+import { RolesGuard, Roles, Role } from 'src/auth/guards/roles.guard';
 
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('movies')
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}
@@ -35,10 +36,16 @@ export class MoviesController {
     return this.moviesService.findAllByUser(userId);
   }
 
+  @Get('admin')
+  @Roles(Role.ADMIN)  
+  async findAllForAdmin(): Promise<Movie[]> {
+    return this.moviesService.findAll();
+  }
+
   @Put(':id')
   async update(
     @Request() req,
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id') id: number,
     @Body() dto: UpdateMovieDto,
   ): Promise<Movie> {
     const userId = req.user.userId;
