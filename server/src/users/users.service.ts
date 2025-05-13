@@ -12,7 +12,7 @@ export class UsersService {
   async create(createUserDto: CreateUserDto): Promise<User> {
     const hashed = await bcrypt.hash(createUserDto.password, 10);
     
-    const role = createUserDto.role ?? 'VISITOR'; 
+    const role = createUserDto.role || 'VISITOR'; 
     
     return this.userModel.create({
       email: createUserDto.email,
